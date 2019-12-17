@@ -20,6 +20,13 @@ module.exports = {
                     // })
 
                     $('a').each((i, elem) => {
+                        const href = $(elem).attr('href')
+                        const category = href.split('/').filter((str, i, arr) => i === arr.length-2)[0]
+                        const unique_name = 
+                            href.split('/')
+                                .filter((str, i, arr) => i === arr.length-1)[0]
+                                .slice(0, -5)
+                        const url = `https://www.nytimes.com${$(elem).attr('href')}`
                         const title = $(elem).children('div.esl82me1').children('h2.esl82me0').text()
                         const summary = $(elem).children('p.e1n8kpyg0').text()
                         // Make sure the article has a title and summary
@@ -29,6 +36,12 @@ module.exports = {
                             ${title}
                             -----------------------------------------------------------
                             ${summary}
+                            -----------------------------------------------------------
+                            ${url}
+                            -----------------------------------------------------------
+                            ${category}
+                            -----------------------------------------------------------
+                            ${unique_name}
                             -----------------------------------------------------------
                             -----------------------------------------------------------
                             `)

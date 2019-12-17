@@ -13,7 +13,7 @@
     <!-- mdbootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet"/>
     <!-- custom css -->
-    <link rel="stylesheet" href="./style.css"/>
+    <link rel="stylesheet" href="./assets/css/style.css"/>
 </head>
 <body>
     
@@ -33,7 +33,7 @@
         <h2 class="card-title h1-responsive pt-3 mb-5 font-bold title"><strong>|| TIMES SCRAPER 3000 ||</strong></h2>
         <p class="mx-5 mb-5 titleInfo">~ New York Times Articles Scraped 4 U ~
         </p>
-        <button type="button" class="btn btn-danger scrapeBtn">SCRAPE NEW ARTICLES</button>
+        <button id="scrapeBtn" type="button" class="btn btn-danger">SCRAPE NEW ARTICLES</button>
       </div>
     </div>
   </div>
@@ -41,8 +41,8 @@
   <!-- action modal -->
 
   <!-- articles container -->
-  <div class="container">
-      <div class="card mb-4" id="articleCards">
+  <div id="articleContainer" class="container">
+      <div class="card mb-4 articleCards">
         <!-- all new articles generate here -->
         <h5 class="card-header danger-color text-white h5">Scraped Headline Goes Here</h5>
         <div class="card-body">
@@ -64,6 +64,6 @@
 <!-- mdbootstrap -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script> 
 <!-- custom script -->
-<script src='./app.js'></script> 
+<script src='./assets/javascript/app.js'></script> 
 </body>
 </html>
