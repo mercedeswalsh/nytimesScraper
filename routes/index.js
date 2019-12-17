@@ -1,5 +1,6 @@
-// module.exports
+// module.exports to bring in routes
 module.exports = app => {
     // require routes (app)
-    require('./scrapeRoutes')(app)
+    require('./articleRoutes')(app)
+    require('./savedRoutes')(app)
 }

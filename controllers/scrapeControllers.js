@@ -1,26 +1,19 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+// const db = require('mongojs')('timesdb')
 // may need additional statements for heroku deployment
 
-// module.exports statement for axios requests
-module.exports = {
-    
+// module.exports statement for axios requests***
+// until then,
+// node controllers/scrapeControllers.js works***
     // cheerio axios requests
-    grabArticles() {
-        axios.get('https://www.nytimes.com/')
-            .then(({ data: html }) => {
-                const $ = cheerio.load(html)
-                console.log('hello')
-                $('div.css-1yjtett').each((i, elem) => {
-                    console.log(i)
-                    console.log($(elem).text())
-                })
-                // $('h2.css1w0yruz').each((i, elem) => {
-                //     console.log(i)
-                //     console.log($(elem).text())
-                // })
-            })
-            .catch(e => console.log(e))
-    }
-
-}
+    axios.get('https://www.nytimes.com/')
+    .then(({ data: html }) => {
+        const $ = cheerio.load(html)
+        // what i want to grab from site .each
+        $('h2.esl82me0').each((i, elem) => {
+            console.log($(elem).text())
+            // insert into db
+        })
+    })
+    .catch(e => console.error(e))
