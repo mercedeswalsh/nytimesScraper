@@ -3,4 +3,5 @@ module.exports = app => {
     // require routes (app)
     require('./articleRoutes')(app)
     require('./savedRoutes')(app)
+    require('./scrapeRoutes')(app)
 }

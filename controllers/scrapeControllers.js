@@ -6,14 +6,42 @@ const cheerio = require('cheerio')
 // module.exports statement for axios requests***
 // until then,
 // node controllers/scrapeControllers.js works***
-    // cheerio axios requests
-    axios.get('https://www.nytimes.com/')
-    .then(({ data: html }) => {
-        const $ = cheerio.load(html)
-        // what i want to grab from site .each
-        $('h2.esl82me0').each((i, elem) => {
-            console.log($(elem).text())
-            // insert into db
+module.exports = {
+
+    async scrapeArticles() {
+        const response = new Promise((resolve, reject) => {
+            axios.get('https://www.nytimes.com/')
+                .then(({ data: html }) => {
+                    const $ = cheerio.load(html)
+                    // what i want to grab from site .each
+                    // $('h2.esl82me0').each((i, elem) => {
+                    //     console.log($(elem).text())
+                    //     // insert into db
+                    // })
+
+                    $('a').each((i, elem) => {
+                        const title = $(elem).children('div.esl82me1').children('h2.esl82me0').text()
+                        const summary = $(elem).children('p.e1n8kpyg0').text()
+                        // Make sure the article has a title and summary
+                        if (title && summary) {
+                            console.log(`
+                            -----------------------------------------------------------
+                            ${title}
+                            -----------------------------------------------------------
+                            ${summary}
+                            -----------------------------------------------------------
+                            -----------------------------------------------------------
+                            `)
+                        }
+                    })
+                    resolve('hello')
+                })
+                .catch(e => reject(e))
         })
-    })
-    .catch(e => console.error(e))
+
+        return response
+    }
+
+}
+    // cheerio axios requests
+
