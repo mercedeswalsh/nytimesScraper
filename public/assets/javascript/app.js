@@ -1,9 +1,11 @@
 // Helper function to display articles
 const updateArticleList = isSaved => {
+  // First clear display
   document.getElementById('articleContainer').innerHTML = ''
-  console.log('updating article list')
+  // Grab articles that are saved or not depending on the parameter isSaved
   axios.get('/articles', { isSaved })
     .then(articles => {
+      // Make sure there are articles
       if (articles.length > 0) {
         articles.forEach(article => 
           document.getElementById('articleContainer').innerHTML += `
@@ -12,6 +14,9 @@ const updateArticleList = isSaved => {
               <div class="card-body">
                 <p class="card-text">${article.summary}</p>
                 ${
+                  // Change buttons on card depending on
+                  // whether the client is on the index
+                  // page or the saved page
                   isSaved
                     ? `
                     <a href="#!" class="btn btn-elegant btn-lg deleteBtn" data-id=${article._id}>
@@ -34,10 +39,10 @@ const updateArticleList = isSaved => {
             </div>
         `)
       } else {
-        console.log('need articles')
+        // If no articles then display empty card
         document.getElementById('articleContainer').innerHTML = `
           <div class="card mb-4 articleCards danger-color">
-            <h5 class="card-header text-white h5">NEED ARTICLE</h5>
+            <h5 class="card-header text-white h5">NEED ARTICLES</h5>
           </div>
         `
       }
@@ -78,8 +83,10 @@ document.addEventListener('click', e => {
 
   // Show notes for article
   if (e.target.classList.contains('noteBtn')) {
-    axios.get(`/notes/article/${e.target.dataset.id}`)
-      .then(notes => {
+    axios.get(`/articles/${e.target.dataset.id}`)
+      .then(article => {
+        // Do something with the notes from the article
+        console.log(article.notes)
         // Have modal popup with the article notes
       })
       .catch(e => console.error(e))
