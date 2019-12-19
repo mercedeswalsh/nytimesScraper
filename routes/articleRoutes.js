@@ -20,7 +20,7 @@ module.exports = app => {
 
     // PUT one article
     app.put('/articles/:id', (req, res) => {
-        Article.udpateOne({ _id: req.params.id }, req.body)
+        Article.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.sendStatus(200))
             .catch(e => console.log(e))
     })

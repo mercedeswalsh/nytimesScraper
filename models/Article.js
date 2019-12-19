@@ -1,12 +1,12 @@
 module.exports = (model, Schema) => {
 
   const Article = new Schema({
-    title: String,
-    summary: String,
-    url: String,
+    title: { type: String, required: true },
+    summary: { type: String, required: true },
+    url: { type: String, required: true },
     category: String,
-    unique_name: String,
-    isSaved: { type: Boolean, default: false},
+    unique_name: { type: String, unique: true, required: true},
+    isSaved: { type: Boolean, required: true, default: false},
     notes: [{ type: Schema.Types.ObjectId , ref: 'Note' }]
   }, {
     timestamps: {

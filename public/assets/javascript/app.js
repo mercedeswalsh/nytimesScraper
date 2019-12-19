@@ -1,13 +1,15 @@
 // Helper function to display articles
 const updateArticleList = isSaved => {
-  // First clear display
-  document.getElementById('articleContainer').innerHTML = ''
   // Grab articles that are saved or not depending on the parameter isSaved
+  console.log(`/articles/${isSaved}`)
   axios.get(`/articles/${isSaved}`)
-    .then(articles => {
+    .then(({ data: articles }) => {
+      // First clear display
+      document.getElementById('articleContainer').innerHTML = ''
+      console.log(articles)
       // Make sure there are articles
       if (articles.length > 0) {
-        articles.forEach(article => 
+        articles.forEach(article =>
           document.getElementById('articleContainer').innerHTML += `
             <div class="card mb-4 articleCards">
               <h5 class="card-header danger-color text-white h5">${article.title}</h5>
@@ -18,7 +20,7 @@ const updateArticleList = isSaved => {
                   // whether the client is on the index
                   // page or the saved page
                   isSaved
-                    ? `
+                  ? `
                     <a href="#!" class="btn btn-elegant btn-lg deleteBtn" data-id=${article._id}>
                       Delete Saved Article
                       <i class="fas fa-trash-alt ml-2" aria-hidden="true"></i>
@@ -28,7 +30,7 @@ const updateArticleList = isSaved => {
                       <i class="far fa-sticky-note ml-2" aria-hidden="true"></i>
                     </a>
                     `
-                    : `
+                  : `
                     <a href="#!" class="btn btn-elegant btn-lg saveBtn" data-id=${article._id}>
                       Save Article
                       <i class="fas fa-heart ml-2" aria-hidden="true"></i>
@@ -62,7 +64,7 @@ document.addEventListener('click', e => {
 
   // Save article
   if (e.target.classList.contains('saveBtn')) {
-    axios.update(`/articles/${e.target.ddataset.id}`, { isSaved: true })
+    axios.put(`/articles/${e.target.dataset.id}`, { isSaved: true })
       .then(() => updateArticleList(false))
       .catch(e => console.error(e))
   }
