@@ -36,7 +36,7 @@ module.exports = app => {
     app.delete('/articles/:id', (req, res) => {
         Article.deleteOne({ _id: req.params.id })
             .then(() => res.sendStatus(200))
-            .catchh(e => console.log(e))
+            .catch(e => console.log(e))
     })
 
 }

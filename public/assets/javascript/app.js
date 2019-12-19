@@ -1,12 +1,10 @@
 // Helper function to display articles
 const updateArticleList = isSaved => {
   // Grab articles that are saved or not depending on the parameter isSaved
-  console.log(`/articles/${isSaved}`)
   axios.get(`/articles/${isSaved}`)
     .then(({ data: articles }) => {
       // First clear display
       document.getElementById('articleContainer').innerHTML = ''
-      console.log(articles)
       // Make sure there are articles
       if (articles.length > 0) {
         articles.forEach(article =>
@@ -96,7 +94,7 @@ document.addEventListener('click', e => {
 
 })
 
-if (window.location.href.includes('Saved')) {
+if (window.location.href.includes('saved')) {
   updateArticleList(true)
 } else {
   updateArticleList(false)
