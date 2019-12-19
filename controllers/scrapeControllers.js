@@ -1,5 +1,6 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+const { Article } = require('../models')
 // const db = require('mongojs')('timesdb')
 // may need additional statements for heroku deployment
 
@@ -45,9 +46,12 @@ module.exports = {
                             -----------------------------------------------------------
                             -----------------------------------------------------------
                             `)
+                            Article.create({ title, summary, url, category, unique_name})
+                                .then(data => console.log(data))
+                                .catch(e => reject(e))
                         }
                     })
-                    resolve('hello')
+                    resolve()
                 })
                 .catch(e => reject(e))
         })

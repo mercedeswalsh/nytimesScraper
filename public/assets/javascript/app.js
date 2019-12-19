@@ -3,7 +3,7 @@ const updateArticleList = isSaved => {
   // First clear display
   document.getElementById('articleContainer').innerHTML = ''
   // Grab articles that are saved or not depending on the parameter isSaved
-  axios.get('/articles', { isSaved })
+  axios.get(`/articles/${isSaved}`)
     .then(articles => {
       // Make sure there are articles
       if (articles.length > 0) {
@@ -55,7 +55,7 @@ document.addEventListener('click', e => {
 
   // Scrape more articles
   if (e.target.id === 'scrapeBtn') {
-    axios.get('/scrape')
+    axios.get('/scrapes')
       .then(() => updateArticleList(false))
       .catch(e => console.error(e))
   }
