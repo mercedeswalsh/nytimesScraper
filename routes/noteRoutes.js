@@ -14,6 +14,7 @@ module.exports = app => {
     // POST a note
     app.post('/notes', (req, res) => {
         Note.create(req.body)
+            // Add note to article
             .then(note => 
                 Article.updateOne({ _id: note.article }, { $push: { notes: note._id }}))
             .then(() => res.sendStatus(200))
@@ -29,8 +30,8 @@ module.exports = app => {
 
     // DELETE a note
     app.delete('/notes/:id', (req, res) => {
-
         Note.deleteOne({ _id: req.params.id })
+            // Remove note from article
             .then(() => 
                 Article.updateOne(
                     { _id: req.body.article }, 
