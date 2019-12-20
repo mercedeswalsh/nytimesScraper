@@ -7,7 +7,7 @@ const updateArticleList = isSaved => {
       document.getElementById('articleContainer').innerHTML = ''
       // Make sure there are articles
       if (articles.length > 0) {
-        articles.forEach(article =>
+        articles.forEach(article => {
           document.getElementById('articleContainer').innerHTML += `
             <div class="card mb-4 articleCards">
               <h5 class="card-header danger-color text-white h5">${article.title}</h5>
@@ -23,10 +23,10 @@ const updateArticleList = isSaved => {
                       Delete Saved Article
                       <i class="fas fa-trash-alt ml-2" aria-hidden="true"></i>
                     </a>
-                    <a href="#!" class="btn btn-elegant btn-lg noteBtn" data-id=${article._id}>
+                    <button type="button" class="btn btn-elegant btn-lg noteBtn" data-toggle="modal" data-target="#notesModal" data-id=${article._id}>
                       Notes
                       <i class="far fa-sticky-note ml-2" aria-hidden="true"></i>
-                    </a>
+                    </button>
                     `
                   : `
                     <a href="#!" class="btn btn-elegant btn-lg saveBtn" data-id=${article._id}>
@@ -36,8 +36,8 @@ const updateArticleList = isSaved => {
                   `
                 }
               </div>
-            </div>
-        `)
+            </div>`
+        })
       } else {
         // If no articles then display empty card
         document.getElementById('articleContainer').innerHTML = `
@@ -48,6 +48,10 @@ const updateArticleList = isSaved => {
       }
     })
     .catch(e => console.error(e))
+}
+
+const updateNoteList = _id => {
+  
 }
 
 // Event Listeners
