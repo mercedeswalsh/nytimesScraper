@@ -4,10 +4,25 @@ const { Article } = require('../models')
 // module.exports with routes pushing to index
 module.exports = app => {
 
-    // GET saved or unsaved articles 
-    app.get('/articles/:isSaved', (req, res) => {
-        Article.find({ isSaved: req.params.isSaved === 'true' })
+    // GET all unsaved articles 
+    app.get('/unsaved_articles', (req, res) => {
+        Article.find({ isSaved: false })
             .then(articles => res.json(articles))
+            .catch(e => console.log(e))
+    })
+
+    // GET all saved articles
+    app.get('/saved_articles', (req, res) => {
+        Article.find({ isSaved: true })
+            .then(articles => res.json(articles))
+            .catch(e => console.log(e))
+    })
+
+    // GET one article
+    app.get('/articles/:id', (req, res) => {
+        Article.find({ _id: req.params.id })
+            .populate('notes')
+            .then(article => res.json(article))
             .catch(e => console.log(e))
     })
 

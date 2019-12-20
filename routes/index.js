@@ -2,6 +2,6 @@
 module.exports = app => {
     // require routes (app)
     require('./articleRoutes')(app)
-    require('./savedRoutes')(app)
+    require('./noteRoutes')(app)
     require('./scrapeRoutes')(app)
 }

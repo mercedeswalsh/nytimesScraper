@@ -1,26 +1,20 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 const { Article } = require('../models')
-// const db = require('mongojs')('timesdb')
-// may need additional statements for heroku deployment
 
-// module.exports statement for axios requests***
-// until then,
-// node controllers/scrapeControllers.js works***
 module.exports = {
-
+    
+    // Scrape new articles from new york times
     async scrapeArticles() {
         const response = new Promise((resolve, reject) => {
+            // Grab nytimes home page
             axios.get('https://www.nytimes.com/')
                 .then(({ data: html }) => {
+                    // Setup nytimes page to be scraped
                     const $ = cheerio.load(html)
-                    // what i want to grab from site .each
-                    // $('h2.esl82me0').each((i, elem) => {
-                    //     console.log($(elem).text())
-                    //     // insert into db
-                    // })
 
                     $('a').each((i, elem) => {
+                        // Grab properties for article
                         const href = $(elem).attr('href')
                         const category = href.split('/').filter((str, i, arr) => i === arr.length-2)[0]
                         const unique_name = 
@@ -32,11 +26,13 @@ module.exports = {
                         const summary = $(elem).children('p.e1n8kpyg0').text()
                         // Make sure the article has a title, summary, and unique name
                         if (title && summary && unique_name) {
+                            // Create article
                             Article.create({ title, summary, url, category, unique_name})
                                 .then(data => console.log(data))
                                 .catch(e => reject(e))
                         }
                     })
+                    // Don't need to return anything
                     resolve()
                 })
                 .catch(e => reject(e))
@@ -46,5 +42,4 @@ module.exports = {
     }
 
 }
-    // cheerio axios requests
 
