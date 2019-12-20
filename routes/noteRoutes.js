@@ -29,12 +29,14 @@ module.exports = app => {
 
     // DELETE a note
     app.delete('/notes/:id', (req, res) => {
+
         Note.deleteOne({ _id: req.params.id })
             .then(() => 
                 Article.updateOne(
                     { _id: req.body.article }, 
                     { $pull: { notes: req.params.id }}
             ))
+            .then(() => res.sendStatus(200))
             .catch(e => console.log(e))
     })
 

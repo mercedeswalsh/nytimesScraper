@@ -50,11 +50,14 @@ const updateArticleList = isSaved => {
     .catch(e => console.error(e))
 }
 
+// Helper function to display notes in modal
 const updateNoteList = article => {
   const noteList = document.getElementById('noteList')
-  console.log('updating note list')
+  // Reset noteList to empty
   noteList.innerHTML = ''
+  // Check if notes exist and contains at least one note
   if (article.notes && article.notes.length > 0) {
+    // Add a list group item for each note
     article.notes.forEach(note => {
       noteList.innerHTML += `
         <li class="list-group-item d-flex justify-content-between">
@@ -65,6 +68,7 @@ const updateNoteList = article => {
         </li>`
     })
   } else {
+    // Client needs to add notes if no notes exist
     noteList.innerHTML += `
       <li class="list-group-item danger-color">
         <span class="text-white">ADD NOTES</span>
@@ -74,7 +78,7 @@ const updateNoteList = article => {
 
 // Event Listeners
 document.addEventListener('click', e => {
-  console.log(e.target.classList)
+
   // Scrape more articles
   if (e.target.id === 'scrapeBtn') {
     axios.get('/scrapes')
@@ -113,23 +117,24 @@ document.addEventListener('click', e => {
 
   // Delete note
   if (e.target.classList.contains('deleteNote')) {
-    console.log(`deleting note ${e.target.dataset.id}`)
+    // Grab article _id
     const article = document.getElementById('noteList').dataset.id
     axios.delete(`/notes/${e.target.dataset.id}`, { article })
-      .then(() => {
-        console.log(`getting article ${article}`)
-        axios.get(`/articles/${article}`)
-      })
+      // Once note is deleted, update note list 
+      .then(() => axios.get(`/articles/${article}`))
       .then(({ data: [article] }) => updateNoteList(article))
       .catch(e => console.error(e))
   }
 
-  // Add note
+  // Add note but only if the user entered text into noteTextArea
   if (e.target.classList.contains('addNoteBtn') && document.getElementById('noteTextArea').value) {
+    // Reset noteTextArea
     const body = document.getElementById('noteTextArea').value
     document.getElementById('noteTextArea').value = ''
+    // Grab article _id
     const article = document.getElementById('noteList').dataset.id
     axios.post('/notes', { body, article })
+      // Once note is added, update note list
       .then(() => axios.get(`/articles/${article}`))
       .then(({ data: [article] }) => updateNoteList(article))
       .catch(e => console.error(e))
@@ -137,8 +142,11 @@ document.addEventListener('click', e => {
 
 })
 
+// Initial article display for index.html and saved.html
 if (window.location.href.includes('saved')) {
+  // saved.html
   updateArticleList(true)
 } else {
+  // index.html
   updateArticleList(false)
 }
