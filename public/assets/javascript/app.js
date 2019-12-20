@@ -14,12 +14,12 @@ const updateArticleList = isSaved => {
               <div class="card-body">
                 <p class="card-text">${article.summary}</p>
                 ${
-                  // Change buttons on card depending on
-                  // whether the client is on the index
-                  // page or the saved page
-                  isSaved
-                  ? `
-                    <a href="#!" class="btn btn-elegant btn-lg deleteBtn" data-id=${article._id}>
+            // Change buttons on card depending on
+            // whether the client is on the index
+            // page or the saved page
+            isSaved
+              ? `
+                    <a href="#!" class="btn btn-elegant btn-lg deleteArticleBtn" data-id=${article._id}>
                       Delete Saved Article
                       <i class="fas fa-trash-alt ml-2" aria-hidden="true"></i>
                     </a>
@@ -28,13 +28,13 @@ const updateArticleList = isSaved => {
                       <i class="far fa-sticky-note ml-2" aria-hidden="true"></i>
                     </button>
                     `
-                  : `
+              : `
                     <a href="#!" class="btn btn-elegant btn-lg saveBtn" data-id=${article._id}>
                       Save Article
                       <i class="fas fa-heart ml-2" aria-hidden="true"></i>
                     </a>
                   `
-                }
+            }
               </div>
             </div>`
         })
@@ -42,7 +42,7 @@ const updateArticleList = isSaved => {
         // If no articles then display empty card
         document.getElementById('articleContainer').innerHTML = `
           <div class="card mb-4 articleCards danger-color">
-            <h5 class="card-header text-white h5">NEED ARTICLES</h5>
+            <h5 class="card-header text-white h5">SCRAPE ARTICLES</h5>
           </div>
         `
       }
@@ -50,13 +50,31 @@ const updateArticleList = isSaved => {
     .catch(e => console.error(e))
 }
 
-const updateNoteList = _id => {
-  
+const updateNoteList = article => {
+  const noteList = document.getElementById('noteList')
+  console.log('updating note list')
+  noteList.innerHTML = ''
+  if (article.notes && article.notes.length > 0) {
+    article.notes.forEach(note => {
+      noteList.innerHTML += `
+        <li class="list-group-item d-flex justify-content-between">
+          <span>${note.body}</span>
+          <button class="deleteNoteBtn" type="button" data-id=${note._id}>
+            <span class="text-danger deleteNote" aria-hidden="true" data-id=${note._id}>×</span>
+          </button>
+        </li>`
+    })
+  } else {
+    noteList.innerHTML += `
+      <li class="list-group-item danger-color">
+        <span class="text-white">ADD NOTES</span>
+      </li>`
+  }
 }
 
 // Event Listeners
 document.addEventListener('click', e => {
-
+  console.log(e.target.classList)
   // Scrape more articles
   if (e.target.id === 'scrapeBtn') {
     axios.get('/scrapes')
@@ -79,7 +97,7 @@ document.addEventListener('click', e => {
   }
 
   // Delete saved article
-  if (e.target.classList.contains('deleteBtn')) {
+  if (e.target.classList.contains('deleteArticleBtn')) {
     axios.delete(`/articles/${e.target.dataset.id}`)
       .then(() => updateArticleList(true))
       .catch(e => console.error(e))
@@ -87,12 +105,33 @@ document.addEventListener('click', e => {
 
   // Show notes for article
   if (e.target.classList.contains('noteBtn')) {
+    document.getElementById('noteList').dataset.id = e.target.dataset.id
     axios.get(`/articles/${e.target.dataset.id}`)
-      .then(article => {
-        // Do something with the notes from the article
-        console.log(article.notes)
-        // Have modal popup with the article notes
+      .then(({ data: [article] }) => updateNoteList(article))
+      .catch(e => console.error(e))
+  }
+
+  // Delete note
+  if (e.target.classList.contains('deleteNote')) {
+    console.log(`deleting note ${e.target.dataset.id}`)
+    const article = document.getElementById('noteList').dataset.id
+    axios.delete(`/notes/${e.target.dataset.id}`, { article })
+      .then(() => {
+        console.log(`getting article ${article}`)
+        axios.get(`/articles/${article}`)
       })
+      .then(({ data: [article] }) => updateNoteList(article))
+      .catch(e => console.error(e))
+  }
+
+  // Add note
+  if (e.target.classList.contains('addNoteBtn') && document.getElementById('noteTextArea').value) {
+    const body = document.getElementById('noteTextArea').value
+    document.getElementById('noteTextArea').value = ''
+    const article = document.getElementById('noteList').dataset.id
+    axios.post('/notes', { body, article })
+      .then(() => axios.get(`/articles/${article}`))
+      .then(({ data: [article] }) => updateNoteList(article))
       .catch(e => console.error(e))
   }
 
