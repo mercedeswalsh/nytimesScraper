@@ -1,5 +1,6 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+const { Article } = require('../models')
 // const db = require('mongojs')('timesdb')
 // may need additional statements for heroku deployment
 
@@ -29,25 +30,14 @@ module.exports = {
                         const url = `https://www.nytimes.com${$(elem).attr('href')}`
                         const title = $(elem).children('div.esl82me1').children('h2.esl82me0').text()
                         const summary = $(elem).children('p.e1n8kpyg0').text()
-                        // Make sure the article has a title and summary
-                        if (title && summary) {
-                            console.log(`
-                            -----------------------------------------------------------
-                            ${title}
-                            -----------------------------------------------------------
-                            ${summary}
-                            -----------------------------------------------------------
-                            ${url}
-                            -----------------------------------------------------------
-                            ${category}
-                            -----------------------------------------------------------
-                            ${unique_name}
-                            -----------------------------------------------------------
-                            -----------------------------------------------------------
-                            `)
+                        // Make sure the article has a title, summary, and unique name
+                        if (title && summary && unique_name) {
+                            Article.create({ title, summary, url, category, unique_name})
+                                .then(data => console.log(data))
+                                .catch(e => reject(e))
                         }
                     })
-                    resolve('hello')
+                    resolve()
                 })
                 .catch(e => reject(e))
         })
