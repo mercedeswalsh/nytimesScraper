@@ -1,7 +1,7 @@
 // Helper function to display articles
 const updateArticleList = isSaved => {
   // Grab articles that are saved or not depending on the parameter isSaved
-  axios.get(`/articles/${isSaved}`)
+  axios.get(`/${isSaved ? '' : 'un'}saved_articles`)
     .then(({ data: articles }) => {
       // First clear display
       document.getElementById('articleContainer').innerHTML = ''
